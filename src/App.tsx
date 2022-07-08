@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { useMetamask, } from "use-metamask";
+import { useEffect} from 'react';
+import { ethers } from 'ethers';
+import GetInfo from './components/GetInfo';
+
 
 function App() {
+  const { connect, metaState } = useMetamask();
+
+// Connect To Metamsk 
+  useEffect(() => {
+    if (!metaState.isConnected) {
+      (async () => {
+        try {
+          await connect(ethers.providers.Web3Provider);
+        } catch (error) {
+          // console.log('Added in Error');
+        }
+      })();
+    }
+  }, []);
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <GetInfo />
     </div>
   );
 }
